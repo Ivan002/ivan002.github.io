@@ -1,20 +1,63 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
 <body>
-<button onclick="connect();">Click here</button>
-<script>
-function connect() {
-    console.log('Getting Bluetooth Device...');
-    navigator.bluetooth.requestDevice(
-    {
-        acceptAllDevices : true
-    })
-    .then(device => {
-        console.log('Got device');
-    })
-     .catch(error => {
-        console.log(error);
-    });
- }
-</script>
+    
+    <button id="connect">Connect To WebUSB Device</button>
+    <button id="disconnect">Disconnect To WebUSB Device</button>
+    <button id="test">Test WebUSB Device</button>
+
+    
+    <script>
+        var optionalServices = ['battery_service'];
+        var acceptAllDevices = true;
+        var server;
+        var service;
+        var characteristic;
+        var value;
+
+        document.querySelector("#connect").addEventListener('click', async function (event) {
+            navigator.bluetooth.requestDevice(
+                {
+                    optionalServices: optionalServices,
+                    acceptAllDevices: acceptAllDevices
+                })
+                .then(device => {
+                    console.log('Connecting to GATT Server...');
+                    device.gatt.connect().then(ser => {
+                        server = ser;
+                        console.log(server)
+                    });
+                })
+        });
+
+        document.querySelector("#test").addEventListener('click', async function (event) {
+
+            server.getPrimaryServices().then(services => {
+                console.log(services)
+            })
+
+            /*'battery_service');
+            console.log(service)
+        
+            characteristic = await service.getCharacteristic('battery_level');
+        
+            value = await characteristic.readValue();*/
+
+        });
+    </script>
+    
+    
+
+
+
 </body>
+
 </html>
