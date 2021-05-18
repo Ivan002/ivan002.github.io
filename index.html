@@ -25,10 +25,9 @@
 
         document.querySelector("#connect").addEventListener('click', async function (event) {
             navigator.bluetooth.requestDevice(
-                {
-                    optionalServices: optionalServices,
-                    acceptAllDevices: acceptAllDevices
-                })
+    {
+        acceptAllDevices : true
+    })
                 .then(device => {
                     console.log('Connecting to GATT Server...');
                     device.gatt.connect().then(ser => {
